@@ -56,5 +56,5 @@ create policy "allow all on admins" on admins for all using (true) with check (t
 
 -- Insert default admin (username: admin, password: nandini2024)
 -- Password is stored as plain text here for simplicity — change after setup!
-insert into admins (username, password_hash) values ('admin', 'Appu@2014')
+insert into admins (username, password_hash) values ('admin', 'nandini2024')
 on conflict (username) do nothing;

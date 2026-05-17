@@ -8,157 +8,122 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --green: #1a7a52; --green-light: #e8f5ee; --green-mid: #2ea66e;
-      --green-dark: #0f4f34; --cream: #faf8f3; --white: #ffffff;
-      --text: #1a1a1a; --muted: #6b7280; --border: #e4e4e4;
-      --amber: #f59e0b; --red: #ef4444; --blue: #3b82f6;
-      --shadow: 0 2px 16px rgba(0,0,0,0.08); --r: 16px;
+      --green:#1a7a52;--green-light:#e8f5ee;--green-mid:#2ea66e;
+      --green-dark:#0f4f34;--cream:#faf8f3;--white:#ffffff;
+      --text:#1a1a1a;--muted:#6b7280;--border:#e4e4e4;
+      --amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;
+      --shadow:0 2px 16px rgba(0,0,0,0.08);--r:16px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
-    h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+    h1,h2,h3{font-family:'DM Serif Display',serif;}
+    .screen{display:none;min-height:100vh;}.screen.active{display:block;}
+    nav{background:var(--green-dark);color:white;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+    .nav-brand{font-family:'DM Serif Display',serif;font-size:1.2rem;display:flex;align-items:center;gap:8px;}
+    .nav-actions{display:flex;align-items:center;gap:12px;}
+    .nav-credit{background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;}
+    .nav-btn{background:transparent;border:1px solid rgba(255,255,255,0.4);color:white;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;}
+    .nav-btn:hover{background:rgba(255,255,255,0.1);}
+    #screen-landing{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1rem;background:linear-gradient(160deg,#0f4f34 0%,#1a7a52 60%,#2ea66e 100%);}
+    .landing-logo{font-size:3.5rem;margin-bottom:1rem;}
+    .landing-title{font-family:'DM Serif Display',serif;font-size:2.2rem;color:white;text-align:center;margin-bottom:0.5rem;}
+    .landing-sub{color:rgba(255,255,255,0.75);font-size:15px;text-align:center;margin-bottom:2.5rem;}
+    .landing-cards{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;width:100%;max-width:480px;}
+    .landing-card{flex:1;min-width:180px;background:white;border-radius:var(--r);padding:1.5rem;cursor:pointer;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:transform 0.2s,box-shadow 0.2s;}
+    .landing-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.25);}
+    .landing-card-icon{font-size:2rem;margin-bottom:0.75rem;}
+    .landing-card-title{font-weight:700;color:var(--green-dark);font-size:15px;margin-bottom:4px;}
+    .landing-card-sub{font-size:12px;color:var(--muted);}
+    #screen-auth{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem 1rem;background:var(--cream);}
+    .auth-card{background:white;border-radius:var(--r);padding:2rem;width:100%;max-width:400px;box-shadow:var(--shadow);}
+    .auth-title{font-size:1.5rem;color:var(--green-dark);margin-bottom:0.5rem;}
+    .auth-sub{font-size:13px;color:var(--muted);margin-bottom:1.5rem;}
+    .auth-tabs{display:flex;gap:0;margin-bottom:1.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+    .auth-tab{flex:1;padding:0.6rem;text-align:center;cursor:pointer;font-size:14px;font-weight:500;background:white;border:none;font-family:'DM Sans',sans-serif;transition:background 0.15s;}
+    .auth-tab.active{background:var(--green);color:white;}
+    .field{margin-bottom:1rem;}
+    label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
+    input,select,textarea{width:100%;padding:0.65rem 0.85rem;font-size:14px;font-family:'DM Sans',sans-serif;border:1.5px solid var(--border);border-radius:10px;outline:none;transition:border-color 0.15s;color:var(--text);background:white;}
+    input:focus,select:focus{border-color:var(--green);}
+    .btn{padding:0.75rem 1.5rem;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;transition:background 0.15s,transform 0.1s;display:inline-flex;align-items:center;gap:6px;}
+    .btn:hover{transform:translateY(-1px);}
+    .btn-primary{background:var(--green);color:white;width:100%;justify-content:center;}
+    .btn-primary:hover{background:var(--green-dark);}
+    .btn-primary:disabled{background:#d1d5db;cursor:not-allowed;transform:none;}
+    .btn-outline{background:white;color:var(--green);border:1.5px solid var(--green);}
+    .btn-sm{padding:0.4rem 0.85rem;font-size:13px;}
+    .btn-red{background:#fee2e2;color:var(--red);}
+    .btn-amber{background:#fef3c7;color:#92400e;}
+    .btn-green-soft{background:var(--green-light);color:var(--green-dark);}
+    .alert{padding:0.75rem 1rem;border-radius:10px;font-size:13px;font-weight:500;margin-bottom:1rem;}
+    .alert-error{background:#fee2e2;color:#b91c1c;}
+    .alert-success{background:#dcfce7;color:#166534;}
+    .alert-info{background:#dbeafe;color:#1e40af;}
+    .page-wrap{max-width:520px;margin:0 auto;padding:1.5rem 1rem 3rem;}
+    .credit-banner{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:white;border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;}
+    .credit-amount{font-family:'DM Serif Display',serif;font-size:2rem;}
+    .credit-label{font-size:12px;opacity:0.8;margin-top:2px;}
+    .credit-days{text-align:right;}
+    .credit-days-num{font-family:'DM Serif Display',serif;font-size:2rem;}
+    .credit-days-label{font-size:12px;opacity:0.8;}
+    .section-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
+    .card{background:white;border-radius:var(--r);padding:1.25rem;box-shadow:var(--shadow);margin-bottom:1rem;border:1px solid var(--border);}
 
-    /* ── SCREENS ── */
-    .screen { display: none; min-height: 100vh; }
-    .screen.active { display: block; }
+    /* ── MULTI-ITEM ORDER ── */
+    .product-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:10px;padding:0.6rem 0;border-bottom:1px solid var(--border);}
+    .product-row:last-child{border-bottom:none;}
+    .product-label{font-size:14px;font-weight:600;}
+    .product-price{font-size:12px;color:var(--muted);}
+    .qty-control{display:flex;align-items:center;gap:6px;}
+    .qty-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--green-dark);transition:background 0.12s;}
+    .qty-btn:hover{background:var(--green-light);border-color:var(--green);}
+    .qty-num{font-size:15px;font-weight:700;min-width:20px;text-align:center;}
+    .item-cost{font-size:13px;font-weight:600;color:var(--green-dark);min-width:36px;text-align:right;}
+    .order-total{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0 0;margin-top:0.5rem;border-top:2px solid var(--border);font-weight:700;}
+    .order-total-amt{font-size:1.1rem;color:var(--green-dark);}
 
-    /* ── NAV ── */
-    nav {
-      background: var(--green-dark); color: white; padding: 1rem 1.5rem;
-      display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;
-    }
-    .nav-brand { font-family: 'DM Serif Display', serif; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
-    .nav-actions { display: flex; align-items: center; gap: 12px; }
-    .nav-credit { background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
-    .nav-btn { background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; }
-    .nav-btn:hover { background: rgba(255,255,255,0.1); }
+    /* ── PAUSE DAYS ── */
+    .pause-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .pause-input{width:70px;text-align:center;font-weight:700;}
 
-    /* ── LANDING ── */
-    #screen-landing {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; padding: 2rem 1rem;
-      background: linear-gradient(160deg, #0f4f34 0%, #1a7a52 60%, #2ea66e 100%);
-    }
-    .landing-logo { font-size: 3.5rem; margin-bottom: 1rem; }
-    .landing-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: white; text-align: center; margin-bottom: 0.5rem; }
-    .landing-sub { color: rgba(255,255,255,0.75); font-size: 15px; text-align: center; margin-bottom: 2.5rem; }
-    .landing-cards { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 480px; }
-    .landing-card {
-      flex: 1; min-width: 180px; background: white; border-radius: var(--r); padding: 1.5rem;
-      cursor: pointer; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .landing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.25); }
-    .landing-card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-    .landing-card-title { font-weight: 700; color: var(--green-dark); font-size: 15px; margin-bottom: 4px; }
-    .landing-card-sub { font-size: 12px; color: var(--muted); }
-
-    /* ── AUTH ── */
-    #screen-auth {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; padding: 2rem 1rem; background: var(--cream);
-    }
-    .auth-card { background: white; border-radius: var(--r); padding: 2rem; width: 100%; max-width: 400px; box-shadow: var(--shadow); }
-    .auth-title { font-size: 1.5rem; color: var(--green-dark); margin-bottom: 0.5rem; }
-    .auth-sub { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; }
-    .auth-tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .auth-tab { flex: 1; padding: 0.6rem; text-align: center; cursor: pointer; font-size: 14px; font-weight: 500; background: white; border: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
-    .auth-tab.active { background: var(--green); color: white; }
-
-    /* ── FORM ELEMENTS ── */
-    .field { margin-bottom: 1rem; }
-    label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
-    input, select, textarea {
-      width: 100%; padding: 0.65rem 0.85rem; font-size: 14px; font-family: 'DM Sans', sans-serif;
-      border: 1.5px solid var(--border); border-radius: 10px; outline: none;
-      transition: border-color 0.15s; color: var(--text); background: white;
-    }
-    input:focus, select:focus { border-color: var(--green); }
-    .btn {
-      padding: 0.75rem 1.5rem; border: none; border-radius: 10px; cursor: pointer;
-      font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-      transition: background 0.15s, transform 0.1s; display: inline-flex; align-items: center; gap: 6px;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--green); color: white; width: 100%; justify-content: center; }
-    .btn-primary:hover { background: var(--green-dark); }
-    .btn-primary:disabled { background: #d1d5db; cursor: not-allowed; transform: none; }
-    .btn-outline { background: white; color: var(--green); border: 1.5px solid var(--green); }
-    .btn-sm { padding: 0.4rem 0.85rem; font-size: 13px; }
-    .btn-red { background: #fee2e2; color: var(--red); }
-    .btn-amber { background: #fef3c7; color: #92400e; }
-    .btn-green-soft { background: var(--green-light); color: var(--green-dark); }
-
-    .alert { padding: 0.75rem 1rem; border-radius: 10px; font-size: 13px; font-weight: 500; margin-bottom: 1rem; }
-    .alert-error { background: #fee2e2; color: #b91c1c; }
-    .alert-success { background: #dcfce7; color: #166534; }
-    .alert-info { background: #dbeafe; color: #1e40af; }
-
-    /* ── CUSTOMER DASHBOARD ── */
-    .page-wrap { max-width: 520px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .credit-banner {
-      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
-      color: white; border-radius: var(--r); padding: 1.5rem; margin-bottom: 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .credit-amount { font-family: 'DM Serif Display', serif; font-size: 2rem; }
-    .credit-label { font-size: 12px; opacity: 0.8; margin-top: 2px; }
-    .credit-days { text-align: right; }
-    .credit-days-num { font-family: 'DM Serif Display', serif; font-size: 2rem; }
-    .credit-days-label { font-size: 12px; opacity: 0.8; }
-
-    .section-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
-    .card { background: white; border-radius: var(--r); padding: 1.25rem; box-shadow: var(--shadow); margin-bottom: 1rem; border: 1px solid var(--border); }
-
-    /* Schedule */
-    .schedule-date-label { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 0.5rem; }
-    .schedule-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .milk-select { flex: 1; min-width: 140px; }
-    .qty-control { display: flex; align-items: center; gap: 8px; }
-    .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--border); background: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--green-dark); transition: background 0.12s; }
-    .qty-btn:hover { background: var(--green-light); border-color: var(--green); }
-    .qty-num { font-size: 16px; font-weight: 700; min-width: 20px; text-align: center; }
-    .cost-badge { font-size: 12px; font-weight: 600; color: var(--green-dark); background: var(--green-light); padding: 3px 8px; border-radius: 20px; }
-
-    .deadline-note { font-size: 12px; color: var(--muted); background: #fef9ec; border: 1px solid #fde68a; border-radius: 8px; padding: 8px 12px; margin-top: 0.75rem; }
-
-    /* History */
-    .history-row { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
-    .history-row:last-child { border-bottom: none; }
-    .history-date { font-size: 13px; font-weight: 600; }
-    .history-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .status-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
-    .status-scheduled { background: #dbeafe; color: #1e40af; }
-    .status-delivered { background: #dcfce7; color: #166534; }
-    .status-paused { background: #fef3c7; color: #92400e; }
-    .status-cancelled { background: #fee2e2; color: #b91c1c; }
-
-    /* UPI */
-    .upi-box { text-align: center; padding: 1rem; }
-    .upi-id { font-size: 1.1rem; font-weight: 700; color: var(--green-dark); background: var(--green-light); padding: 0.5rem 1.5rem; border-radius: 8px; display: inline-block; margin: 0.5rem 0; letter-spacing: 0.5px; }
-    .upi-note { font-size: 12px; color: var(--muted); margin-top: 0.5rem; }
+    .schedule-date-label{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:0.75rem;}
+    .deadline-note{font-size:12px;color:var(--muted);background:#fef9ec;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;margin-top:0.75rem;}
+    .history-row{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);}
+    .history-row:last-child{border-bottom:none;}
+    .history-date{font-size:13px;font-weight:600;}
+    .history-detail{font-size:12px;color:var(--muted);margin-top:2px;}
+    .status-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;}
+    .status-scheduled{background:#dbeafe;color:#1e40af;}
+    .status-delivered{background:#dcfce7;color:#166534;}
+    .status-paused{background:#fef3c7;color:#92400e;}
+    .status-cancelled{background:#fee2e2;color:#b91c1c;}
+    .divider{height:1px;background:var(--border);margin:1.5rem 0;}
+    .empty{text-align:center;padding:2rem;color:var(--muted);font-size:14px;}
 
     /* ── ADMIN ── */
-    .admin-wrap { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .admin-tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .admin-tab { padding: 0.5rem 1rem; border-radius: 8px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
-    .admin-tab.active { background: var(--green); color: white; border-color: var(--green); }
+    .admin-wrap{max-width:760px;margin:0 auto;padding:1.5rem 1rem 3rem;}
+    .admin-tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;}
+    .admin-tab{padding:0.5rem 1rem;border-radius:8px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+    .admin-tab.active{background:var(--green);color:white;border-color:var(--green);}
 
-    .customer-row { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 0; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
-    .customer-row:last-child { border-bottom: none; }
-    .customer-name { font-weight: 700; font-size: 14px; }
-    .customer-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .customer-credit { font-weight: 700; color: var(--green-dark); font-size: 15px; }
-    .topup-input { width: 80px; padding: 0.4rem 0.6rem; font-size: 13px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; }
+    /* Product summary tiles */
+    .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.25rem;}
+    .summary-tile{background:var(--green-light);border-radius:12px;padding:1rem;text-align:center;border:1px solid var(--green-border,#a7d9c0);}
+    .summary-tile-icon{font-size:1.5rem;margin-bottom:4px;}
+    .summary-tile-label{font-size:12px;color:var(--green-dark);font-weight:600;}
+    .summary-tile-val{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--green-dark);}
+    .summary-tile-sub{font-size:11px;color:var(--muted);}
 
-    .orders-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .orders-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--green-light); color: var(--green-dark); font-weight: 700; }
-    .orders-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }
-    .orders-table tr:hover td { background: #f9f9f9; }
-
-    .empty { text-align: center; padding: 2rem; color: var(--muted); font-size: 14px; }
-    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .customer-row{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 0;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
+    .customer-row:last-child{border-bottom:none;}
+    .customer-name{font-weight:700;font-size:14px;}
+    .customer-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+    .customer-credit{font-weight:700;color:var(--green-dark);font-size:15px;}
+    .topup-input{width:80px;padding:0.4rem 0.6rem;font-size:13px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;}
+    .orders-table{width:100%;border-collapse:collapse;font-size:13px;}
+    .orders-table th{text-align:left;padding:0.6rem 0.75rem;background:var(--green-light);color:var(--green-dark);font-weight:700;}
+    .orders-table td{padding:0.6rem 0.75rem;border-bottom:1px solid var(--border);}
+    .orders-table tr:hover td{background:#f9f9f9;}
   </style>
 </head>
 <body>
@@ -193,8 +158,6 @@
       </div>
     </div>
     <div id="auth-alert"></div>
-
-    <!-- Customer auth -->
     <div id="customer-auth">
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
@@ -212,8 +175,6 @@
         <button class="btn btn-primary" onclick="customerRegister()">Create Account</button>
       </div>
     </div>
-
-    <!-- Admin auth -->
     <div id="admin-auth" style="display:none;">
       <div class="field"><label>Username</label><input id="admin-user" placeholder="admin"/></div>
       <div class="field"><label>Password</label><input id="admin-pass" type="password" placeholder="••••••••"/></div>
@@ -241,54 +202,92 @@
       </div>
       <div class="credit-days">
         <div class="credit-days-num" id="cust-days">0</div>
-        <div class="credit-days-label">Days Remaining</div>
+        <div class="credit-days-label">Est. Days Remaining</div>
       </div>
     </div>
 
-    <!-- Tomorrow's Schedule -->
+    <!-- Tomorrow's Order -->
     <div class="card">
-      <div class="section-title">📅 Tomorrow's Delivery</div>
+      <div class="section-title">📅 Tomorrow's Order</div>
       <div class="schedule-date-label" id="tomorrow-label"></div>
-      <div class="schedule-row">
-        <select class="milk-select" id="sched-milk" onchange="updateCost()">
-          <option value="Nandini Green Milk:28">🟢 Nandini Green Milk — ₹28</option>
-          <option value="Nandini Blue Milk:28">🔵 Nandini Blue Milk — ₹28</option>
-          <option value="Nandini Orange Milk:28">🟠 Nandini Orange Milk — ₹28</option>
-          <option value="Nandini Curd:29">🍶 Nandini Curd — ₹29</option>
-        </select>
-        <div class="qty-control">
-          <button class="qty-btn" onclick="changeQty(-1)">−</button>
-          <span class="qty-num" id="sched-qty">1</span>
-          <button class="qty-btn" onclick="changeQty(1)">+</button>
+
+      <!-- Multi-item rows -->
+      <div id="product-rows">
+        <div class="product-row">
+          <div><div class="product-label">🟢 Green Milk</div><div class="product-price">₹28 / 500ml</div></div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeItemQty('green',-1)">−</button>
+            <span class="qty-num" id="qty-green">0</span>
+            <button class="qty-btn" onclick="changeItemQty('green',1)">+</button>
+          </div>
+          <div class="item-cost" id="cost-green">—</div>
         </div>
-        <div class="cost-badge" id="sched-cost">₹28</div>
+        <div class="product-row">
+          <div><div class="product-label">🔵 Blue Milk</div><div class="product-price">₹25 / 500ml</div></div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeItemQty('blue',-1)">−</button>
+            <span class="qty-num" id="qty-blue">0</span>
+            <button class="qty-btn" onclick="changeItemQty('blue',1)">+</button>
+          </div>
+          <div class="item-cost" id="cost-blue">—</div>
+        </div>
+        <div class="product-row">
+          <div><div class="product-label">🟠 Orange Milk</div><div class="product-price">₹28 / 500ml</div></div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeItemQty('orange',-1)">−</button>
+            <span class="qty-num" id="qty-orange">0</span>
+            <button class="qty-btn" onclick="changeItemQty('orange',1)">+</button>
+          </div>
+          <div class="item-cost" id="cost-orange">—</div>
+        </div>
+        <div class="product-row">
+          <div><div class="product-label">🍶 Curd</div><div class="product-price">₹29 / 500ml</div></div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeItemQty('curd',-1)">−</button>
+            <span class="qty-num" id="qty-curd">0</span>
+            <button class="qty-btn" onclick="changeItemQty('curd',1)">+</button>
+          </div>
+          <div class="item-cost" id="cost-curd">—</div>
+        </div>
       </div>
+      <div class="order-total">
+        <span>Total for tomorrow</span>
+        <span class="order-total-amt" id="order-total">₹0</span>
+      </div>
+
       <div style="display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap;">
-        <button class="btn btn-primary btn-sm" onclick="saveSchedule('scheduled')" id="btn-save">Save</button>
-        <button class="btn btn-amber btn-sm" onclick="saveSchedule('paused')">⏸ Pause Tomorrow</button>
-        <button class="btn btn-red btn-sm" onclick="saveSchedule('cancelled')">✕ Cancel Tomorrow</button>
+        <button class="btn btn-primary btn-sm" onclick="saveSchedule()">✅ Save Order</button>
+        <button class="btn btn-red btn-sm" onclick="cancelTomorrow()">✕ Cancel Tomorrow</button>
       </div>
-      <div class="deadline-note">⏰ Changes must be made before <strong>9:00 PM</strong> today to apply for tomorrow.</div>
+
+      <!-- Pause for X days -->
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div class="section-title" style="margin-bottom:0.5rem;">⏸ Pause Delivery</div>
+        <div class="pause-row">
+          <span style="font-size:13px;color:var(--muted);">Pause for</span>
+          <input class="pause-input" id="pause-days" type="number" min="1" max="30" placeholder="days" value="1"/>
+          <span style="font-size:13px;color:var(--muted);">day(s) starting tomorrow</span>
+          <button class="btn btn-amber btn-sm" onclick="pauseForDays()">⏸ Pause</button>
+        </div>
+      </div>
+
+      <div class="deadline-note">⏰ Changes must be made before <strong>9:00 PM</strong> today.</div>
       <div id="sched-alert" style="margin-top:0.75rem;"></div>
     </div>
 
+    <!-- UPI top-up -->
     <div class="card">
       <div class="section-title">💳 Add Credits via UPI</div>
-      <div class="upi-box">
-        <p style="font-size:14px;color:var(--text);font-weight:600;">To top up your credits:</p>
-        <ol style="text-align:left;font-size:13px;color:var(--muted);margin:0.75rem 0 1rem;padding-left:1.25rem;line-height:2;">
-          <li>Contact the admin for the UPI payment details</li>
-          <li>Make the payment via UPI</li>
-          <li>Enter your UTR / Transaction ID below</li>
-          <li>Credits will be added after verification</li>
-        </ol>
-        <div style="margin-top:0.5rem;">
-          <input id="utr-input" placeholder="Enter UTR / Transaction ID" style="margin-bottom:0.5rem;"/>
-          <input id="utr-amount" type="number" placeholder="Amount paid (₹)"/>
-          <button class="btn btn-primary" style="margin-top:0.5rem;" onclick="submitUTR()">Submit Payment Request</button>
-          <div id="utr-alert" style="margin-top:0.5rem;"></div>
-        </div>
-      </div>
+      <ol style="font-size:13px;color:var(--muted);margin:0.5rem 0 1rem;padding-left:1.25rem;line-height:2;">
+        <li>Contact the admin for UPI payment details</li>
+        <li>Make the payment via UPI</li>
+        <li>Enter your UTR / Transaction ID below</li>
+        <li>Credits will be added after verification</li>
+      </ol>
+      <input id="utr-input" placeholder="Enter UTR / Transaction ID" style="margin-bottom:0.5rem;"/>
+      <input id="utr-amount" type="number" placeholder="Amount paid (₹)"/>
+      <button class="btn btn-primary" style="margin-top:0.5rem;" onclick="submitUTR()">Submit Payment Request</button>
+      <div id="utr-alert" style="margin-top:0.5rem;"></div>
     </div>
 
     <!-- History -->
@@ -306,13 +305,11 @@
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
+<!-- ADMIN -->
 <div id="screen-admin" class="screen">
   <nav>
     <div class="nav-brand">⚙️ Admin Panel</div>
-    <div class="nav-actions">
-      <button class="nav-btn" onclick="logout()">Logout</button>
-    </div>
+    <div class="nav-actions"><button class="nav-btn" onclick="logout()">Logout</button></div>
   </nav>
   <div class="admin-wrap">
     <div class="admin-tabs">
@@ -320,20 +317,16 @@
       <button class="admin-tab" onclick="adminTab('orders')">📦 Today's Orders</button>
       <button class="admin-tab" onclick="adminTab('all-orders')">📋 All Schedules</button>
     </div>
-
-    <!-- Customers tab -->
     <div id="admin-customers" class="card">
       <div class="section-title">👥 All Customers</div>
       <div id="customers-list"><div class="empty">Loading...</div></div>
     </div>
-
-    <!-- Today's orders tab -->
     <div id="admin-orders" class="card" style="display:none;">
       <div class="section-title">📦 Today's Deliveries — <span id="today-label"></span></div>
+      <!-- Product totals summary -->
+      <div class="summary-grid" id="product-summary"></div>
       <div id="orders-list"><div class="empty">Loading...</div></div>
     </div>
-
-    <!-- All schedules tab -->
     <div id="admin-all-orders" class="card" style="display:none;">
       <div class="section-title">📋 All Upcoming Schedules</div>
       <div id="all-orders-list"><div class="empty">Loading...</div></div>
@@ -346,8 +339,16 @@ const SUPABASE_URL = 'https://daqluwqdavoqhvbhbbbm.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhcWx1d3FkYXZvcWh2YmhiYmJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjQwMTUsImV4cCI6MjA5NDU0MDAxNX0.t9OuR9E0i0MmBvBE8B-7za8-wnNe1-PgGdAQICDYv8A';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Product catalogue
+const PRODUCTS = {
+  green:  { name:'Nandini Green Milk',  price:28, icon:'🟢' },
+  blue:   { name:'Nandini Blue Milk',   price:25, icon:'🔵' },
+  orange: { name:'Nandini Orange Milk', price:28, icon:'🟠' },
+  curd:   { name:'Nandini Curd',        price:29, icon:'🍶' }
+};
+
 let currentCustomer = null;
-let schedQty = 1;
+let itemQty = { green:0, blue:0, orange:0, curd:0 };
 
 // ── HELPERS ──
 function showScreen(id) {
@@ -359,18 +360,13 @@ function showAlert(id, msg, type='error') {
   const el = document.getElementById(id);
   if (!el) return;
   el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
-  setTimeout(() => { if(el) el.innerHTML=''; }, 4000);
+  setTimeout(() => { if(el) el.innerHTML=''; }, 5000);
 }
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-}
-function tomorrow() {
-  const d = new Date(); d.setDate(d.getDate()+1);
-  return d.toISOString().split('T')[0];
-}
+function formatDate(d) { return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
+function tomorrow() { const d=new Date(); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; }
 function today() { return new Date().toISOString().split('T')[0]; }
-function getPrice(milkVal) { return parseInt(milkVal.split(':')[1]); }
-function getMilkName(milkVal) { return milkVal.split(':')[0]; }
+function addDays(n) { const d=new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
+function isPastDeadline() { return new Date().getHours() >= 21; }
 
 // ── LANDING ──
 function showAuth(type) {
@@ -381,166 +377,183 @@ function showAuth(type) {
   document.getElementById('auth-sub').textContent = type==='customer' ? 'Login or create a new account' : 'Enter admin credentials';
 }
 function switchAuthTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
   document.getElementById('login-form').style.display = tab==='login' ? '' : 'none';
   document.getElementById('register-form').style.display = tab==='register' ? '' : 'none';
 }
 
-// ── CUSTOMER AUTH ──
+// ── AUTH ──
 async function customerLogin() {
   const phone = document.getElementById('login-phone').value.trim();
   if (!phone) return showAlert('auth-alert','Enter your phone number');
-  const { data, error } = await sb.from('customers').select('*').eq('phone', phone).single();
-  if (error || !data) return showAlert('auth-alert','Phone number not found. Please register.');
-  currentCustomer = data;
-  loadCustomerDashboard();
+  const { data, error } = await sb.from('customers').select('*').eq('phone',phone).single();
+  if (error||!data) return showAlert('auth-alert','Phone number not found. Please register.');
+  currentCustomer = data; loadCustomerDashboard();
 }
 async function customerRegister() {
-  const name = document.getElementById('reg-name').value.trim();
-  const phone = document.getElementById('reg-phone').value.trim();
-  const address = document.getElementById('reg-address').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
+  const name=document.getElementById('reg-name').value.trim();
+  const phone=document.getElementById('reg-phone').value.trim();
+  const address=document.getElementById('reg-address').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
   if (!name||!phone||!address) return showAlert('auth-alert','Please fill all required fields');
   const { data, error } = await sb.from('customers').insert([{name,phone,address,email,credits:0}]).select().single();
-  if (error) return showAlert('auth-alert', error.message.includes('unique') ? 'Phone number already registered.' : 'Registration failed. Try again.');
-  currentCustomer = data;
-  loadCustomerDashboard();
+  if (error) return showAlert('auth-alert', error.message.includes('unique') ? 'Phone already registered.' : 'Registration failed.');
+  currentCustomer = data; loadCustomerDashboard();
 }
-
-// ── ADMIN AUTH ──
 async function adminLogin() {
-  const user = document.getElementById('admin-user').value.trim();
-  const pass = document.getElementById('admin-pass').value.trim();
+  const user=document.getElementById('admin-user').value.trim();
+  const pass=document.getElementById('admin-pass').value.trim();
   const { data } = await sb.from('admins').select('*').eq('username',user).eq('password_hash',pass).single();
   if (!data) return showAlert('auth-alert','Invalid credentials');
   loadAdminDashboard();
 }
+function logout() { currentCustomer=null; showScreen('screen-landing'); }
 
-// ── LOGOUT ──
-function logout() { currentCustomer = null; showScreen('screen-landing'); }
+// ── MULTI-ITEM QTY ──
+function changeItemQty(key, delta) {
+  itemQty[key] = Math.max(0, Math.min(10, itemQty[key] + delta));
+  document.getElementById('qty-'+key).textContent = itemQty[key];
+  const cost = itemQty[key] > 0 ? '₹'+(PRODUCTS[key].price * itemQty[key]) : '—';
+  document.getElementById('cost-'+key).textContent = cost;
+  updateOrderTotal();
+}
+function updateOrderTotal() {
+  const total = Object.keys(PRODUCTS).reduce((s,k) => s + PRODUCTS[k].price * itemQty[k], 0);
+  document.getElementById('order-total').textContent = '₹' + total;
+}
+function resetQty() {
+  Object.keys(itemQty).forEach(k => { itemQty[k]=0; document.getElementById('qty-'+k).textContent=0; document.getElementById('cost-'+k).textContent='—'; });
+  updateOrderTotal();
+}
 
 // ── CUSTOMER DASHBOARD ──
 async function loadCustomerDashboard() {
   showScreen('screen-customer');
-  // Refresh customer data
-  const { data } = await sb.from('customers').select('*').eq('id', currentCustomer.id).single();
+  const { data } = await sb.from('customers').select('*').eq('id',currentCustomer.id).single();
   if (data) currentCustomer = data;
+  const credits = parseFloat(currentCustomer.credits||0);
+  document.getElementById('cust-credit').textContent = '₹'+credits.toFixed(2);
+  document.getElementById('nav-credit').textContent = '₹'+credits.toFixed(2);
+  // Rough est days based on min order cost ₹25
+  document.getElementById('cust-days').textContent = credits > 0 ? Math.floor(credits/25) : 0;
 
-  const credits = parseFloat(currentCustomer.credits || 0);
-  const milkVal = document.getElementById('sched-milk').value;
-  const price = getPrice(milkVal);
-  const daysEst = Math.floor(credits / (price * schedQty));
-
-  document.getElementById('cust-credit').textContent = '₹' + credits.toFixed(2);
-  document.getElementById('cust-days').textContent = daysEst;
-  document.getElementById('nav-credit').textContent = '₹' + credits.toFixed(2);
-
-  // Tomorrow label
   const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
   document.getElementById('tomorrow-label').textContent = tmr.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
 
-  // Load existing schedule for tomorrow
-  const { data: sched } = await sb.from('delivery_schedules').select('*').eq('customer_id', currentCustomer.id).eq('delivery_date', tomorrow()).single();
-  if (sched) {
-    const opt = Array.from(document.getElementById('sched-milk').options).find(o => getMilkName(o.value) === sched.milk_type);
-    if (opt) document.getElementById('sched-milk').value = opt.value;
-    schedQty = sched.packets;
-    document.getElementById('sched-qty').textContent = schedQty;
-    updateCost();
+  // Load existing schedules for tomorrow and pre-fill
+  resetQty();
+  const { data: scheds } = await sb.from('delivery_schedules').select('*').eq('customer_id',currentCustomer.id).eq('delivery_date',tomorrow());
+  if (scheds && scheds.length) {
+    scheds.forEach(s => {
+      const key = Object.keys(PRODUCTS).find(k => PRODUCTS[k].name === s.milk_type);
+      if (key) { itemQty[key]=s.packets; document.getElementById('qty-'+key).textContent=s.packets; document.getElementById('cost-'+key).textContent='₹'+(PRODUCTS[key].price*s.packets); }
+    });
+    updateOrderTotal();
   }
-
-  loadHistory();
-  loadCreditHistory();
+  loadHistory(); loadCreditHistory();
 }
 
-function updateCost() {
-  const milkVal = document.getElementById('sched-milk').value;
-  const price = getPrice(milkVal);
-  document.getElementById('sched-cost').textContent = '₹' + (price * schedQty);
+// ── SAVE MULTI-ITEM ORDER ──
+async function saveSchedule() {
+  if (isPastDeadline()) return showAlert('sched-alert','Changes must be made before 9:00 PM.','error');
+  const total = Object.keys(PRODUCTS).reduce((s,k) => s + PRODUCTS[k].price * itemQty[k], 0);
+  if (total === 0) return showAlert('sched-alert','Please add at least one item.','error');
+  const credits = parseFloat(currentCustomer.credits||0);
+  if (total > credits) return showAlert('sched-alert',`Insufficient credits. Need ₹${total}, have ₹${credits.toFixed(2)}.`,'error');
+
+  // Delete existing tomorrow entries and re-insert
+  await sb.from('delivery_schedules').delete().eq('customer_id',currentCustomer.id).eq('delivery_date',tomorrow());
+  const rows = Object.keys(PRODUCTS).filter(k => itemQty[k]>0).map(k => ({
+    customer_id: currentCustomer.id,
+    delivery_date: tomorrow(),
+    milk_type: PRODUCTS[k].name,
+    packets: itemQty[k],
+    status: 'scheduled',
+    cost: PRODUCTS[k].price * itemQty[k]
+  }));
+  const { error } = await sb.from('delivery_schedules').insert(rows);
+  if (error) return showAlert('sched-alert','Failed to save. Try again.','error');
+  showAlert('sched-alert','✅ Order saved for tomorrow!','success');
+  loadCustomerDashboard();
 }
 
-function changeQty(d) {
-  schedQty = Math.max(1, Math.min(10, schedQty + d));
-  document.getElementById('sched-qty').textContent = schedQty;
-  updateCost();
+async function cancelTomorrow() {
+  if (isPastDeadline()) return showAlert('sched-alert','Changes must be made before 9:00 PM.','error');
+  await sb.from('delivery_schedules').delete().eq('customer_id',currentCustomer.id).eq('delivery_date',tomorrow());
+  showAlert('sched-alert','✕ Tomorrow\'s delivery cancelled.','success');
+  resetQty(); loadCustomerDashboard();
 }
 
-async function saveSchedule(status) {
-  // Check 9pm deadline
-  const now = new Date();
-  if (now.getHours() >= 21) {
-    return showAlert('sched-alert', 'Changes must be made before 9:00 PM. Deadline passed for today.', 'error');
+// ── PAUSE FOR X DAYS ──
+async function pauseForDays() {
+  if (isPastDeadline()) return showAlert('sched-alert','Changes must be made before 9:00 PM.','error');
+  const days = parseInt(document.getElementById('pause-days').value);
+  if (!days || days < 1 || days > 30) return showAlert('sched-alert','Enter a number between 1 and 30.','error');
+
+  const rows = [];
+  for (let i=1; i<=days; i++) {
+    const date = addDays(i);
+    rows.push({ customer_id:currentCustomer.id, delivery_date:date, milk_type:'Paused', packets:0, status:'paused', cost:0 });
   }
-
-  const milkVal = document.getElementById('sched-milk').value;
-  const milkType = getMilkName(milkVal);
-  const price = getPrice(milkVal);
-  const cost = price * schedQty;
-  const credits = parseFloat(currentCustomer.credits || 0);
-
-  if (status === 'scheduled' && cost > credits) {
-    return showAlert('sched-alert', `Insufficient credits. You need ₹${cost} but have ₹${credits.toFixed(2)}.`, 'error');
+  // Delete existing schedules for those dates, then insert paused
+  for (let i=1; i<=days; i++) {
+    await sb.from('delivery_schedules').delete().eq('customer_id',currentCustomer.id).eq('delivery_date',addDays(i));
   }
-
-  const payload = { customer_id: currentCustomer.id, delivery_date: tomorrow(), milk_type: milkType, packets: schedQty, status, cost };
-  const { error } = await sb.from('delivery_schedules').upsert(payload, { onConflict: 'customer_id,delivery_date' });
-  if (error) return showAlert('sched-alert', 'Failed to save. Try again.', 'error');
-
-  const msgs = { scheduled:'✅ Delivery scheduled!', paused:'⏸ Delivery paused for tomorrow.', cancelled:'✕ Delivery cancelled for tomorrow.' };
-  showAlert('sched-alert', msgs[status] || 'Saved!', 'success');
+  const { error } = await sb.from('delivery_schedules').insert(rows);
+  if (error) return showAlert('sched-alert','Failed to pause. Try again.','error');
+  showAlert('sched-alert',`⏸ Delivery paused for ${days} day${days>1?'s':''} starting tomorrow.`,'success');
   loadCustomerDashboard();
 }
 
 async function loadHistory() {
-  const { data } = await sb.from('delivery_schedules').select('*').eq('customer_id', currentCustomer.id).order('delivery_date', { ascending: false }).limit(10);
+  const { data } = await sb.from('delivery_schedules').select('*').eq('customer_id',currentCustomer.id).order('delivery_date',{ascending:false}).limit(15);
   const el = document.getElementById('history-list');
-  if (!data || !data.length) { el.innerHTML = '<div class="empty">No deliveries yet.</div>'; return; }
-  el.innerHTML = data.map(r => `
+  if (!data||!data.length) { el.innerHTML='<div class="empty">No deliveries yet.</div>'; return; }
+  // Group by date
+  const byDate = {};
+  data.forEach(r => { if(!byDate[r.delivery_date]) byDate[r.delivery_date]=[]; byDate[r.delivery_date].push(r); });
+  el.innerHTML = Object.entries(byDate).map(([date,rows]) => `
     <div class="history-row">
       <div>
-        <div class="history-date">${formatDate(r.delivery_date)}</div>
-        <div class="history-detail">${r.milk_type} × ${r.packets} — ₹${r.cost}</div>
+        <div class="history-date">${formatDate(date)}</div>
+        <div class="history-detail">${rows.map(r => r.status==='paused'?'⏸ Paused':`${r.milk_type} ×${r.packets} — ₹${r.cost}`).join(' + ')}</div>
       </div>
-      <span class="status-badge status-${r.status}">${r.status}</span>
+      <span class="status-badge status-${rows[0].status}">${rows[0].status}</span>
     </div>`).join('');
 }
 
 async function loadCreditHistory() {
-  const { data } = await sb.from('credit_transactions').select('*').eq('customer_id', currentCustomer.id).order('created_at', { ascending: false }).limit(10);
+  const { data } = await sb.from('credit_transactions').select('*').eq('customer_id',currentCustomer.id).order('created_at',{ascending:false}).limit(10);
   const el = document.getElementById('credit-history-list');
-  if (!data || !data.length) { el.innerHTML = '<div class="empty">No transactions yet.</div>'; return; }
+  if (!data||!data.length) { el.innerHTML='<div class="empty">No transactions yet.</div>'; return; }
   el.innerHTML = data.map(r => `
     <div class="history-row">
       <div>
-        <div class="history-date">${r.type === 'topup' ? '➕' : '➖'} ₹${r.amount}</div>
-        <div class="history-detail">${r.note || ''} · ${formatDate(r.created_at)}</div>
+        <div class="history-date">${r.type==='topup'?'➕':'➖'} ₹${r.amount}</div>
+        <div class="history-detail">${r.note||''} · ${formatDate(r.created_at)}</div>
       </div>
       <span class="status-badge ${r.type==='topup'?'status-delivered':'status-paused'}">${r.type}</span>
     </div>`).join('');
 }
 
 async function submitUTR() {
-  const utr = document.getElementById('utr-input').value.trim();
-  const amount = document.getElementById('utr-amount').value.trim();
-  if (!utr || !amount) return showAlert('utr-alert','Please enter UTR and amount','error');
-  // Save as pending note in credit_transactions
-  await sb.from('credit_transactions').insert([{ customer_id: currentCustomer.id, amount: parseFloat(amount), type: 'topup', note: `PENDING - UTR: ${utr}` }]);
-  document.getElementById('utr-input').value='';
-  document.getElementById('utr-amount').value='';
+  const utr=document.getElementById('utr-input').value.trim();
+  const amount=document.getElementById('utr-amount').value.trim();
+  if (!utr||!amount) return showAlert('utr-alert','Please enter UTR and amount','error');
+  await sb.from('credit_transactions').insert([{customer_id:currentCustomer.id,amount:parseFloat(amount),type:'topup',note:`PENDING - UTR: ${utr}`}]);
+  document.getElementById('utr-input').value=''; document.getElementById('utr-amount').value='';
   showAlert('utr-alert','Payment request submitted! Credits will be added after verification.','success');
 }
 
-// ── ADMIN DASHBOARD ──
+// ── ADMIN ──
 async function loadAdminDashboard() {
   showScreen('screen-admin');
   document.getElementById('today-label').textContent = formatDate(today());
   loadAdminCustomers();
 }
-
 function adminTab(tab) {
   document.querySelectorAll('.admin-tab').forEach((t,i) => {
-    const tabs = ['customers','orders','all-orders'];
-    t.classList.toggle('active', tabs[i]===tab);
+    t.classList.toggle('active',['customers','orders','all-orders'][i]===tab);
   });
   document.getElementById('admin-customers').style.display = tab==='customers' ? '' : 'none';
   document.getElementById('admin-orders').style.display = tab==='orders' ? '' : 'none';
@@ -553,7 +566,7 @@ function adminTab(tab) {
 async function loadAdminCustomers() {
   const { data } = await sb.from('customers').select('*').order('name');
   const el = document.getElementById('customers-list');
-  if (!data || !data.length) { el.innerHTML = '<div class="empty">No customers yet.</div>'; return; }
+  if (!data||!data.length) { el.innerHTML='<div class="empty">No customers yet.</div>'; return; }
   el.innerHTML = data.map(c => `
     <div class="customer-row">
       <div style="flex:1;">
@@ -562,43 +575,59 @@ async function loadAdminCustomers() {
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <div class="customer-credit">₹${parseFloat(c.credits||0).toFixed(2)}</div>
-        <input class="topup-input" id="topup-${c.id}" type="number" placeholder="₹ add"/>
+        <input class="topup-input" id="topup-${c.id}" type="number" placeholder="₹"/>
         <button class="btn btn-green-soft btn-sm" onclick="addCredits('${c.id}')">Add</button>
         <button class="btn btn-red btn-sm" onclick="deductCredits('${c.id}')">Deduct</button>
       </div>
     </div>`).join('');
 }
 
-async function addCredits(customerId) {
-  const input = document.getElementById('topup-'+customerId);
-  const amount = parseFloat(input.value);
-  if (!amount || amount <= 0) return alert('Enter a valid amount');
-  const { data: cust } = await sb.from('customers').select('credits').eq('id',customerId).single();
-  const newCredits = parseFloat(cust.credits||0) + amount;
-  await sb.from('customers').update({ credits: newCredits }).eq('id', customerId);
-  await sb.from('credit_transactions').insert([{ customer_id: customerId, amount, type:'topup', note:'Admin top-up via UPI' }]);
-  input.value = '';
-  loadAdminCustomers();
+async function addCredits(cid) {
+  const input=document.getElementById('topup-'+cid);
+  const amount=parseFloat(input.value);
+  if (!amount||amount<=0) return alert('Enter a valid amount');
+  const { data:cust } = await sb.from('customers').select('credits').eq('id',cid).single();
+  await sb.from('customers').update({credits:parseFloat(cust.credits||0)+amount}).eq('id',cid);
+  await sb.from('credit_transactions').insert([{customer_id:cid,amount,type:'topup',note:'Admin top-up via UPI'}]);
+  input.value=''; loadAdminCustomers();
 }
-
-async function deductCredits(customerId) {
-  const input = document.getElementById('topup-'+customerId);
-  const amount = parseFloat(input.value);
-  if (!amount || amount <= 0) return alert('Enter a valid amount');
-  const { data: cust } = await sb.from('customers').select('credits').eq('id',customerId).single();
-  const newCredits = Math.max(0, parseFloat(cust.credits||0) - amount);
-  await sb.from('customers').update({ credits: newCredits }).eq('id', customerId);
-  await sb.from('credit_transactions').insert([{ customer_id: customerId, amount, type:'deduction', note:'Admin deduction' }]);
-  input.value = '';
-  loadAdminCustomers();
+async function deductCredits(cid) {
+  const input=document.getElementById('topup-'+cid);
+  const amount=parseFloat(input.value);
+  if (!amount||amount<=0) return alert('Enter a valid amount');
+  const { data:cust } = await sb.from('customers').select('credits').eq('id',cid).single();
+  await sb.from('customers').update({credits:Math.max(0,parseFloat(cust.credits||0)-amount)}).eq('id',cid);
+  await sb.from('credit_transactions').insert([{customer_id:cid,amount,type:'deduction',note:'Admin deduction'}]);
+  input.value=''; loadAdminCustomers();
 }
 
 async function loadAdminTodayOrders() {
-  const { data } = await sb.from('delivery_schedules').select('*, customers(name, phone, address)').eq('delivery_date', today()).order('created_at');
+  const { data } = await sb.from('delivery_schedules').select('*, customers(name,phone,address)').eq('delivery_date',today()).neq('status','paused').order('created_at');
   const el = document.getElementById('orders-list');
-  if (!data || !data.length) { el.innerHTML = '<div class="empty">No deliveries scheduled for today.</div>'; return; }
+  const summaryEl = document.getElementById('product-summary');
+
+  if (!data||!data.length) {
+    el.innerHTML='<div class="empty">No deliveries scheduled for today.</div>';
+    summaryEl.innerHTML='';
+    return;
+  }
+
+  // ── Product totals ──
+  const totals = { green:0, blue:0, orange:0, curd:0 };
+  data.forEach(o => {
+    if (o.milk_type==='Nandini Green Milk')  totals.green  += o.packets;
+    if (o.milk_type==='Nandini Blue Milk')   totals.blue   += o.packets;
+    if (o.milk_type==='Nandini Orange Milk') totals.orange += o.packets;
+    if (o.milk_type==='Nandini Curd')        totals.curd   += o.packets;
+  });
+  summaryEl.innerHTML = `
+    <div class="summary-tile"><div class="summary-tile-icon">🟢</div><div class="summary-tile-val">${totals.green}</div><div class="summary-tile-label">Green Milk</div><div class="summary-tile-sub">packets · ₹${totals.green*28}</div></div>
+    <div class="summary-tile"><div class="summary-tile-icon">🔵</div><div class="summary-tile-val">${totals.blue}</div><div class="summary-tile-label">Blue Milk</div><div class="summary-tile-sub">packets · ₹${totals.blue*25}</div></div>
+    <div class="summary-tile"><div class="summary-tile-icon">🟠</div><div class="summary-tile-val">${totals.orange}</div><div class="summary-tile-label">Orange Milk</div><div class="summary-tile-sub">packets · ₹${totals.orange*28}</div></div>
+    <div class="summary-tile"><div class="summary-tile-icon">🍶</div><div class="summary-tile-val">${totals.curd}</div><div class="summary-tile-label">Curd</div><div class="summary-tile-sub">packets · ₹${totals.curd*29}</div></div>`;
+
   el.innerHTML = `<table class="orders-table">
-    <thead><tr><th>Customer</th><th>Address</th><th>Milk</th><th>Qty</th><th>Cost</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th>Customer</th><th>Address</th><th>Item</th><th>Qty</th><th>Cost</th><th>Status</th><th></th></tr></thead>
     <tbody>${data.map(o => `<tr>
       <td><strong>${o.customers?.name}</strong><br><small>${o.customers?.phone}</small></td>
       <td style="font-size:12px;">${o.customers?.address}</td>
@@ -606,33 +635,32 @@ async function loadAdminTodayOrders() {
       <td>${o.packets}</td>
       <td>₹${o.cost}</td>
       <td><span class="status-badge status-${o.status}">${o.status}</span></td>
-      <td><button class="btn btn-green-soft btn-sm" onclick="markDelivered('${o.id}','${o.customer_id}',${o.cost})">✓ Delivered</button></td>
+      <td><button class="btn btn-green-soft btn-sm" onclick="markDelivered('${o.id}','${o.customer_id}',${o.cost})">✓</button></td>
     </tr>`).join('')}</tbody>
   </table>`;
 }
 
 async function markDelivered(schedId, customerId, cost) {
-  await sb.from('delivery_schedules').update({ status: 'delivered' }).eq('id', schedId);
-  // Deduct credits
-  const { data: cust } = await sb.from('customers').select('credits').eq('id', customerId).single();
+  await sb.from('delivery_schedules').update({status:'delivered'}).eq('id',schedId);
+  const { data:cust } = await sb.from('customers').select('credits').eq('id',customerId).single();
   const newCredits = Math.max(0, parseFloat(cust.credits||0) - cost);
-  await sb.from('customers').update({ credits: newCredits }).eq('id', customerId);
-  await sb.from('credit_transactions').insert([{ customer_id: customerId, amount: cost, type:'deduction', note:'Delivery charge' }]);
+  await sb.from('customers').update({credits:newCredits}).eq('id',customerId);
+  await sb.from('credit_transactions').insert([{customer_id:customerId,amount:cost,type:'deduction',note:'Delivery charge'}]);
   loadAdminTodayOrders();
 }
 
 async function loadAdminAllOrders() {
-  const { data } = await sb.from('delivery_schedules').select('*, customers(name, phone)').gte('delivery_date', today()).order('delivery_date').limit(50);
+  const { data } = await sb.from('delivery_schedules').select('*, customers(name,phone)').gte('delivery_date',today()).order('delivery_date').limit(100);
   const el = document.getElementById('all-orders-list');
-  if (!data || !data.length) { el.innerHTML = '<div class="empty">No upcoming schedules.</div>'; return; }
+  if (!data||!data.length) { el.innerHTML='<div class="empty">No upcoming schedules.</div>'; return; }
   el.innerHTML = `<table class="orders-table">
-    <thead><tr><th>Date</th><th>Customer</th><th>Milk</th><th>Qty</th><th>Cost</th><th>Status</th></tr></thead>
+    <thead><tr><th>Date</th><th>Customer</th><th>Item</th><th>Qty</th><th>Cost</th><th>Status</th></tr></thead>
     <tbody>${data.map(o => `<tr>
       <td>${formatDate(o.delivery_date)}</td>
       <td><strong>${o.customers?.name}</strong><br><small>${o.customers?.phone}</small></td>
       <td>${o.milk_type}</td>
       <td>${o.packets}</td>
-      <td>₹${o.cost}</td>
+      <td>${o.cost>0?'₹'+o.cost:'—'}</td>
       <td><span class="status-badge status-${o.status}">${o.status}</span></td>
     </tr>`).join('')}</tbody>
   </table>`;
